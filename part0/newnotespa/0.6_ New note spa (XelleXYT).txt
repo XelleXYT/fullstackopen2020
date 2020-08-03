@@ -1,0 +1,14 @@
+title 0.6: New note spa (XelleXYT)
+
+note over BROWSER / NAVEGADOR
+Browser shows the new note in the display.
+El navegador muestra la nueva nota en pantalla.
+end note
+
+BROWSER / NAVEGADOR->SERVER / SERVIDOR: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+SERVER / SERVIDOR-->BROWSER / NAVEGADOR: HTTP status code 201 Created
+
+note over BROWSER / NAVEGADOR:
+The 201 status code is a content cration.
+El código de estado 201 indica que se ha creado el contenido.
+end note
