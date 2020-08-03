@@ -1,0 +1,21 @@
+title 0.5: Single page app (XelleXYT)
+
+BROWSER / NAVEGADOR->SERVER / SERVIDOR: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa
+SERVER / SERVIDOR-->BROWSER / NAVEGADOR: HTML-code
+BROWSER / NAVEGADOR->SERVER / SERVIDOR: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+SERVER / SERVIDOR-->BROWSER / NAVEGADOR: main.css
+BROWSER / NAVEGADOR->SERVER / SERVIDOR: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa.js
+SERVER / SERVIDOR-->BROWSER / NAVEGADOR: spa.js
+
+note over BROWSER / NAVEGADOR:
+Browser starts executing js-code that requests JSON data from server.
+El navegador ejecuta el código js que solicita una petición de datos JSON al servidor.
+end note
+
+BROWSER / NAVEGADOR->SERVER / SERVIDOR: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+SERVER / SERVIDOR-->BROWSER / NAVEGADOR: [{content: "HTML is easy", date: "2019-05-23T17:30:31.098Z"}, ...]
+
+note over BROWSER / NAVEGADOR:
+Browser executes the event handler that renders notes to display.
+El navegador ejecuta el evento que renderiza las notas en pantalla.
+end note
