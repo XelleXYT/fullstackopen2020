@@ -30,11 +30,10 @@ const Part = (props) => {
 }
 
 const Total = (props) => {
-  const { course } = props
-  var totalEx = 0
-  course.parts.map((part) => {
-    totalEx += part.exercises
-  })
+  const { parts } = props
+  const totalEx = parts.reduce((s, p) => {
+    return s + p.exercises
+  },0)
   return(
     <>
       <p>
@@ -50,7 +49,7 @@ const Course = (props) => {
     <>
       <Header course={course} />
       <Content course={course} />
-      <Total course={course} />
+      <Total parts={course.parts} />
     </>
   )
 }
