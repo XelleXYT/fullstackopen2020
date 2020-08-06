@@ -4,9 +4,12 @@ const Languages = (props) => {
     const { country } = props
 
     return (
-        <ul>
-            {country.languages.map((language)=>(<li key={language.iso639_2}>{language.name}</li>))}
-        </ul>
+        <>
+            <h2>Spoken languages</h2>
+            <ul>
+                {country.languages.map((language)=>(<li key={language.iso639_2}>{language.name}</li>))}
+            </ul>
+        </>
     )
 }
 
