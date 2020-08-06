@@ -2,7 +2,7 @@ import React from 'react'
 import personService from '../services/persons'
 
 const PersonForm = (props) => {
-    const{ persons, setPersons, newName, setNewName, handleNameChange, newNumber, setNewNumber, handleNumberChange} = props
+    const{ persons, setPersons, newName, setNewName, handleNameChange, newNumber, setNewNumber, handleNumberChange, message, setMessage} = props
 
     const addPerson = (event) => {
         event.preventDefault()
@@ -24,6 +24,12 @@ const PersonForm = (props) => {
                                     setPersons(refreshedPersons)
                                 })
                         })
+                    
+                    setMessage(`Updated ${newName} number`)
+                    setTimeout(() => {
+                        setMessage(null)
+                    }, 5000)
+                    
                     setNewName('')
                     setNewNumber('')
                 }
@@ -40,6 +46,12 @@ const PersonForm = (props) => {
                 .createPerson(personObject)
                 .then(returnedPerson => {
                     setPersons(persons.concat(returnedPerson))
+                    
+                    setMessage(`Added ${newName}`)
+                    setTimeout(() => {
+                        setMessage(null)
+                    }, 5000)
+                    
                     setNewName('')
                     setNewNumber('')
                 })
