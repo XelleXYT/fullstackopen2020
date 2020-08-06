@@ -2,7 +2,7 @@ import React from 'react'
 import Country from './Country'
 
 const Countries = (props) => {
-    const { countries, newFilter } = props
+    const { countries, newFilter, setNewFilter } = props
 
     const filterCountries = () => {
         const auxCountries = countries.filter((country) => (
@@ -16,13 +16,16 @@ const Countries = (props) => {
                     <Country country={country}/>
                 )
             }
-
             return (
-                auxCountries.map((country)=>(<div key={country.numericCode}>{country.name}</div>))
+                auxCountries.map((country)=>(
+                    <div key={country.numericCode}>
+                        {country.name}
+                        <button onClick={()=>{setNewFilter(country.name)}}>show</button>
+                    </div>
+                ))
             )
-        } else {
-            return (<div>Too many matches, specify another filter</div>)
         }
+        return (<div>Too many matches, specify another filter</div>)
     }
 
     return (
