@@ -16,7 +16,7 @@ const App = () => {
 
   useEffect(() => {
     personService
-      .getAll()
+      .getPersons()
       .then(initialPersons => {
         setPersons(initialPersons)
       })
@@ -29,7 +29,7 @@ const App = () => {
       <h3>Add a new</h3>
       <PersonForm persons={persons} setPersons={setPersons} newName={newName} setNewName={setNewName} handleNameChange={handleNameChange} newNumber={newNumber} setNewNumber={setNewNumber} handleNumberChange={handleNumberChange}/>
       <h3>Numbers</h3>
-      <Persons persons={persons} newFilter={newFilter}/>
+      <Persons persons={persons} setPersons={setPersons} newFilter={newFilter}/>
     </div>
   )
 }
