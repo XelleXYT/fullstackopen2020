@@ -2,7 +2,7 @@ import React from 'react'
 import personService from '../services/persons'
 
 const Persons = (props) => {
-    const {persons, setPersons, newFilter} = props
+    const {persons, setPersons, newFilter, setMessage, setMessageType} = props
 
     const deletePerson = (person) => {
         if(window.confirm(`Delete ${person.name} ?`)){
@@ -14,6 +14,16 @@ const Persons = (props) => {
                     .then(refreshedPersons => {
                         setPersons(refreshedPersons)
                     })
+            })
+            .catch(() => {
+                setMessageType('error')
+                setMessage(`Information of ${person.name} has been removed from server`)
+
+                setPersons(persons.filter(n => n.id !== person.id))
+
+                setTimeout(() => {
+                    setMessage(null)
+                }, 5000)
             })
         }
     }

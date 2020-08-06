@@ -2,7 +2,7 @@ import React from 'react'
 import personService from '../services/persons'
 
 const PersonForm = (props) => {
-    const{ persons, setPersons, newName, setNewName, handleNameChange, newNumber, setNewNumber, handleNumberChange, message, setMessage} = props
+    const{ persons, setPersons, newName, setNewName, handleNameChange, newNumber, setNewNumber, handleNumberChange, setMessage, setMessageType} = props
 
     const addPerson = (event) => {
         event.preventDefault()
@@ -25,13 +25,15 @@ const PersonForm = (props) => {
                                 })
                         })
                     
+                    setMessageType('success')
                     setMessage(`Updated ${newName} number`)
-                    setTimeout(() => {
-                        setMessage(null)
-                    }, 5000)
                     
                     setNewName('')
                     setNewNumber('')
+
+                    setTimeout(() => {
+                        setMessage(null)
+                    }, 5000)
                 }
             } else {
                 alert(`${newName} is already added to phonebook with that number`)
@@ -47,13 +49,15 @@ const PersonForm = (props) => {
                 .then(returnedPerson => {
                     setPersons(persons.concat(returnedPerson))
                     
+                    setMessageType('success')
                     setMessage(`Added ${newName}`)
-                    setTimeout(() => {
-                        setMessage(null)
-                    }, 5000)
                     
                     setNewName('')
                     setNewNumber('')
+
+                    setTimeout(() => {
+                        setMessage(null)
+                    }, 5000)
                 })
         }
     }

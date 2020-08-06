@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 const Notification = (props) => {
-    const { message } = props
+    const { message, type } = props
 
     if (message === null) {
       return null
     }
   
     return (
-      <div className="success">
+      <div className={type}>
         {message}
       </div>
     )
