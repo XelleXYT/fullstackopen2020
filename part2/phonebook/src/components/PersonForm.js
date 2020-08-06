@@ -6,7 +6,6 @@ const PersonForm = (props) => {
 
     const addPerson = (event) => {
         event.preventDefault()
-
         if (persons.filter(person => person.name === newName).length !== 0) {
             const person = persons.filter(person => person.name === newName)[0]
             if (person.number !== newNumber) {
