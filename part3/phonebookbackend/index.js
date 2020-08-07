@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 
+const morgan = require('morgan')
+
 app.use(express.json())
 
 let persons = [
@@ -25,6 +27,8 @@ let persons = [
       "number": "+34-642345678"
     }
   ]
+
+  app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
   app.get('/api/persons', (request, response) => {
     response.json(persons)
