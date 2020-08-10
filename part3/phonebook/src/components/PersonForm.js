@@ -22,11 +22,16 @@ const PersonForm = (props) => {
                                 .getPersons()
                                 .then(refreshedPersons => {
                                     setPersons(refreshedPersons)
+                                    setMessageType('success')
+                                    setMessage(`Updated ${newName} number`)
                                 })
                         })
-                    
-                    setMessageType('success')
-                    setMessage(`Updated ${newName} number`)
+                        .catch(error => {
+                            setMessageType('error')
+                            setMessage(error.response.data.error)
+                            console.error(error.response.data.error)
+
+                        })
                     
                     setNewName('')
                     setNewNumber('')
@@ -51,14 +56,20 @@ const PersonForm = (props) => {
                     
                     setMessageType('success')
                     setMessage(`Added ${newName}`)
-                    
-                    setNewName('')
-                    setNewNumber('')
-
-                    setTimeout(() => {
-                        setMessage(null)
-                    }, 5000)
                 })
+                .catch(error => {
+                    setMessageType('error')
+                    setMessage(error.response.data.error)
+                    console.error(error.response.data.error)
+                })
+
+            setNewName('')
+            setNewNumber('')
+
+            setTimeout(() => {
+                setMessage(null)
+            }, 5000)
+
         }
     }
 
