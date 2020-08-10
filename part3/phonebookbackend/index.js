@@ -8,7 +8,6 @@ const morgan = require('morgan')
 const cors = require('cors')
 
 const Person = require('./models/person')
-const { request } = require('express')
 
 app.use(express.json())
 
