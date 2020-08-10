@@ -13,18 +13,19 @@ const Persons = (props) => {
                     .getPersons()
                     .then(refreshedPersons => {
                         setPersons(refreshedPersons)
+                        setMessageType('success')
+                        setMessage(`Information of ${person.name} has been removed from server`)
                     })
             })
-            .catch(() => {
+            .catch(error => {
                 setMessageType('error')
-                setMessage(`Information of ${person.name} has been removed from server`)
-
-                setPersons(persons.filter(n => n.id !== person.id))
-
-                setTimeout(() => {
-                    setMessage(null)
-                }, 5000)
+                setMessage(error.response.data.error)
+                console.error(error.response.data.error)
             })
+
+            setTimeout(() => {
+                setMessage(null)
+            }, 5000)
         }
     }
 
