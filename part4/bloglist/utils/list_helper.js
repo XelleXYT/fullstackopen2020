@@ -61,6 +61,38 @@ const mostBlogs = (blogs) => {
     return topauthor
 }
 
+const mostLikes = (blogs) => {
+    var topLikes = {
+        author: "No one",
+        likes: 0
+    }
+
+    var authorList =
+    _(blogs)
+        .groupBy('author')
+        .map((objs, key) => ({
+            'author': key,
+            'likes': _.sumBy(objs, 'likes')
+            }))
+        .value()
+
+    var maxLikes = 0
+    authorList.forEach(author => {
+        if(author.likes > maxLikes){
+            maxLikes = author.likes
+            topLikes = {
+                author: author.author,
+                likes: author.likes
+            }
+        }
+        console.log(topLikes)
+    })
+
+    console.log(topLikes)
+
+    return topLikes
+}
+
 module.exports = {
-    dummy, totalLikes, favoriteBlog, mostBlogs
+    dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes
 }
