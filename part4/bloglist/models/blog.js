@@ -5,7 +5,7 @@ mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true)
 
 const blogSchema = new mongoose.Schema({
-  autor: {
+  author: {
     type: String,
     required: true
   },

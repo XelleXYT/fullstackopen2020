@@ -2,7 +2,7 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "autor": "Alejandro Luna",
+    "author": "Alejandro Luna",
     "title": "Prueba 1",
     "url": "https://xellex.es/"
 }
