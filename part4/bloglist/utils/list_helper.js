@@ -85,11 +85,7 @@ const mostLikes = (blogs) => {
                 likes: author.likes
             }
         }
-        console.log(topLikes)
     })
-
-    console.log(topLikes)
-
     return topLikes
 }
 
