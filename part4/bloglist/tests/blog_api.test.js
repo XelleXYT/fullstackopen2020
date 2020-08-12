@@ -50,6 +50,22 @@ test('the first blog is about HTTP methods', async () => {
   expect(title).toContain('HTML is easy')
 })
 
+test('verify that the unique identifier is named id', async () => {
+  const response = await api.get('/api/blogs')
+
+  const id = response.body.map(r => r.id)[0]
+
+  expect(id).toBeDefined()
+})
+
+test('verify that _id is not defined', async () => {
+  const response = await api.get('/api/blogs')
+
+  const _id = response.body.map(r => r._id)[0]
+
+  expect(_id).not.toBeDefined()
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
