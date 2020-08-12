@@ -146,6 +146,42 @@ test('delete a blog post', async () => {
 
 })
 
+test('update a blog post', async () => {
+
+  var newBlog = new Blog({
+    title: 'Blog a cambiar',
+    author: 'Alejandro Luna',
+    url: 'https://xellex.es/delete',
+    likes: 0
+  })
+
+  const newLikes = 123
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const responsePrePut = await api.get('/api/blogs')
+
+  expect(responsePrePut.body[responsePrePut.body.length-1].likes).toBe(0)
+
+  const blogId = responsePrePut.body[responsePrePut.body.length-1].id
+
+  newBlog.likes = newLikes
+
+  await api
+    .put(`/api/blogs/${blogId}`)
+    .send(newBlog)
+    .expect(200)
+
+  const responsePostPut = await api.get('/api/blogs')
+
+  expect(responsePostPut.body[responsePostPut.body.length-1].likes).toBe(newLikes)
+  expect(responsePostPut.body).toHaveLength(helper.initialBlogs.length+1)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
