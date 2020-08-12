@@ -1,29 +1,17 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const helper = require('./test_helper')
 const app = require('../app')
 
 const api = supertest(app)
 
 const Blog = require('../models/blog')
 
-const initialBlogs = [
-  {
-    title: 'HTML is easy',
-    author: 'Alejandro Luna',
-    url: 'https://xellex.es/HTML'
-  },
-  {
-    title: 'Browser can execute only Javascript',
-    author: 'Alejandro Luna',
-    url: 'https://xellex.es/JS'
-  }
-]
-
 beforeEach(async () => {
   await Blog.deleteMany({})
 
-  for (var i = 0; i < initialBlogs.length; i++){
-    let blogObject = new Blog(initialBlogs[i])
+  for (let blog of helper.initialBlogs){
+    let blogObject = new Blog(blog)
     await blogObject.save()
   }
 })
@@ -38,7 +26,7 @@ test('blogs are returned as json', async () => {
 test('there are two blogs', async () => {
   const response = await api.get('/api/blogs')
 
-  expect(response.body).toHaveLength(initialBlogs.length)
+  expect(response.body).toHaveLength(helper.initialBlogs.length)
 })
 
 test('the first blog is about HTTP methods', async () => {
@@ -82,7 +70,7 @@ test('create a new blog post', async () => {
 
   const titles = response.body.map(r => r.title)
 
-  expect(response.body).toHaveLength(initialBlogs.length+1)
+  expect(response.body).toHaveLength(helper.initialBlogs.length+1)
   expect(titles).toContain('Nuevo blog')
 
 })
@@ -102,9 +90,9 @@ test('if likes empty it will default 0', async () => {
 
   const response = await api.get('/api/blogs')
 
-  const responseBlog = response.body.map(r => r)[initialBlogs.length]
+  const responseBlog = response.body.map(r => r)[helper.initialBlogs.length]
 
-  expect(response.body).toHaveLength(initialBlogs.length+1)
+  expect(response.body).toHaveLength(helper.initialBlogs.length+1)
   expect(responseBlog).toBeDefined()
   expect(responseBlog.title).toBe('Likes empty')
   expect(responseBlog.likes).toBe(0)
@@ -123,7 +111,39 @@ test('if title and url empty it will return *400 Bad Request*', async () => {
 
   const response = await api.get('/api/blogs')
 
-  expect(response.body).toHaveLength(initialBlogs.length)
+  expect(response.body).toHaveLength(helper.initialBlogs.length)
+})
+
+test('delete a blog post', async () => {
+
+  const newBlog = new Blog({
+    title: 'Blog a borrar',
+    author: 'Alejandro Luna',
+    url: 'https://xellex.es/delete'
+  })
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const responsePreDelete = await api.get('/api/blogs')
+
+  expect(responsePreDelete.body).toHaveLength(helper.initialBlogs.length+1)
+
+  const blogId = responsePreDelete.body[responsePreDelete.body.length-1].id
+
+  await api
+    .delete(`/api/blogs/${blogId}`)
+    .expect(204)
+
+  const responsePostDelete = await api.get('/api/blogs')
+
+  const titles = responsePostDelete.body.map(r => r.title)
+
+  expect(responsePostDelete.body).toHaveLength(helper.initialBlogs.length)
+  expect(titles).not.toContain('Blog a borrar')
+
 })
 
 afterAll(() => {
