@@ -7,12 +7,10 @@ const logger = require('./utils/logger')
 const blogsRouter = require('./controllers/blogs')
 const middleware = require('./utils/middleware')
 
-const mongoUrl = config.MONGODB_URI
-
 logger.info('connecting to', config.MONGODB_URI)
 
 mongoose
-    .connect(mongoUrl, 
+    .connect(config.MONGODB_URI, 
         { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {logger.info('connected to MongoDB')})
     .catch(error => {logger.error('error connecting to MongoDB:',error.message)})
