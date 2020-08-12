@@ -5,7 +5,6 @@ const app = require('../app')
 const api = supertest(app)
 
 const Blog = require('../models/blog')
-const { forEach } = require('lodash')
 
 const initialBlogs = [
   {
@@ -105,13 +104,26 @@ test('if likes empty it will default 0', async () => {
 
   const responseBlog = response.body.map(r => r)[initialBlogs.length]
 
-  console.log(responseBlog)
-
   expect(response.body).toHaveLength(initialBlogs.length+1)
   expect(responseBlog).toBeDefined()
   expect(responseBlog.title).toBe('Likes empty')
   expect(responseBlog.likes).toBe(0)
 
+})
+
+test('if title and url empty it will return *400 Bad Request*', async () => {
+
+  const newBlog = new Blog({
+    author: 'Alejandro Luna'
+  })
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+  const response = await api.get('/api/blogs')
+
+  expect(response.body).toHaveLength(initialBlogs.length)
 })
 
 afterAll(() => {
