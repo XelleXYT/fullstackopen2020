@@ -88,6 +88,32 @@ test('create a new blog post', async () => {
 
 })
 
+test('if likes empty it will default 0', async () => {
+
+  const newBlog = new Blog({
+    title: 'Likes empty',
+    author: 'Alejandro Luna',
+    url: 'https://xellex.es/likes'
+  })
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+
+  const responseBlog = response.body.map(r => r)[initialBlogs.length]
+
+  console.log(responseBlog)
+
+  expect(response.body).toHaveLength(initialBlogs.length+1)
+  expect(responseBlog).toBeDefined()
+  expect(responseBlog.title).toBe('Likes empty')
+  expect(responseBlog.likes).toBe(0)
+
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
