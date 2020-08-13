@@ -56,12 +56,14 @@ test('verify that _id is not defined', async () => {
 test('create a new blog post', async () => {
 
   const newBlog = new Blog({
+    _id:'3',
     title: 'Nuevo blog',
     author: 'Alejandro Luna',
     url: 'https://google.es'
   })
   await api
     .post('/api/blogs')
+    .set('authorization', `bearer ${helper.getToken()}`)
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -78,12 +80,14 @@ test('create a new blog post', async () => {
 test('if likes empty it will default 0', async () => {
 
   const newBlog = new Blog({
+    _id:'3',
     title: 'Likes empty',
     author: 'Alejandro Luna',
     url: 'https://xellex.es/likes'
   })
   await api
     .post('/api/blogs')
+    .set('authorization', `bearer ${helper.getToken()}`)
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -102,10 +106,12 @@ test('if likes empty it will default 0', async () => {
 test('if title and url empty it will return *400 Bad Request*', async () => {
 
   const newBlog = new Blog({
+    _id:'3',
     author: 'Alejandro Luna'
   })
   await api
     .post('/api/blogs')
+    .set('authorization', `bearer ${helper.getToken()}`)
     .send(newBlog)
     .expect(400)
 
@@ -117,12 +123,14 @@ test('if title and url empty it will return *400 Bad Request*', async () => {
 test('delete a blog post', async () => {
 
   const newBlog = new Blog({
+    _id:'3',
     title: 'Blog a borrar',
     author: 'Alejandro Luna',
     url: 'https://xellex.es/delete'
   })
   await api
     .post('/api/blogs')
+    .set('authorization', `bearer ${helper.getToken()}`)
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -135,6 +143,7 @@ test('delete a blog post', async () => {
 
   await api
     .delete(`/api/blogs/${blogId}`)
+    .set('authorization', `bearer ${helper.getToken()}`)
     .expect(204)
 
   const responsePostDelete = await api.get('/api/blogs')
@@ -149,6 +158,7 @@ test('delete a blog post', async () => {
 test('update a blog post', async () => {
 
   var newBlog = new Blog({
+    _id:'3',
     title: 'Blog a cambiar',
     author: 'Alejandro Luna',
     url: 'https://xellex.es/delete',
@@ -159,6 +169,7 @@ test('update a blog post', async () => {
 
   await api
     .post('/api/blogs')
+    .set('authorization', `bearer ${helper.getToken()}`)
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -180,6 +191,24 @@ test('update a blog post', async () => {
 
   expect(responsePostPut.body[responsePostPut.body.length-1].likes).toBe(newLikes)
   expect(responsePostPut.body).toHaveLength(helper.initialBlogs.length+1)
+})
+
+test('get 401 Unauthorized',  async () => {
+  var newBlog = new Blog({
+    _id:'3',
+    title: 'Unauthorized blog',
+    author: 'Alejandro Luna',
+    url: 'https://xellex.es/unauthorized',
+    likes: 0
+  })
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(401)
+
+  const response = await api.get('/api/blogs')
+  expect(response.body).toHaveLength(helper.initialBlogs.length)
 })
 
 afterAll(() => {
