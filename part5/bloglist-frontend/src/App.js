@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Message from './components/Message'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -8,6 +9,9 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+
+  const [message, setMessage] = useState(null)
+  const [messageType, setMessageType] = useState('error')
 
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -46,7 +50,11 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      console.error('Wrong credentials')
+      setMessage('wrong username or password')
+      setMessageType('error')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     }
   }
 
@@ -67,12 +75,21 @@ const App = () => {
       }
 
       await blogService.create(blog)
+      setMessage(`a new blog ${blog.title} by ${blog.author}`)
+      setMessageType('success')
       setTitle('')
       setAuthor('')
       setUrl('')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
 
     } catch (e) {
-      console.error(e)
+      setMessage(e.message)
+      setMessageType('error')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     }
   }
 
@@ -80,6 +97,7 @@ const App = () => {
     return (
       <div>
         <h2>log in to application</h2>
+        <Message message={message} type={messageType} />
         <form onSubmit={handleLogin}>
           <div>
             username <input type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)} />
@@ -96,6 +114,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Message message={message} type={messageType} />
       <p>{`${user.name} logged in`} <button onClick={handleLogout}>logout</button></p>
       <h2>create new</h2>
       <form onSubmit={handleCreate}>
