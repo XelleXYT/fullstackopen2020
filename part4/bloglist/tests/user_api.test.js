@@ -44,6 +44,22 @@ test('create a new user', async () => {
     expect(usernames).toContain('Prueba4')
 })
 
+test('failed to create a new invalid user', async () => {
+    const newUser = {
+        username: 'Prueba5',
+        name: 'Prueba5',
+        password: 'P5'
+    }
+
+    await api
+        .post('/api/users')
+        .send(newUser)
+        .expect(400)
+
+    const response = await api.get('/api/users')
+    expect(response.body).toHaveLength(helper.initialUsers.length)
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
