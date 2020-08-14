@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 const Blog = (props) => {
 
-  const {blog, likeBlog, currentUser, removeBlog} = props
+  const { blog, likeBlog, currentUser, removeBlog } = props
 
   const [likes, setLikes] = useState(blog.likes)
 
@@ -22,7 +22,7 @@ const Blog = (props) => {
     } catch (e) {
       console.error(e)
     }
-    
+
   }
 
   const deleteBlog = async (event) => {

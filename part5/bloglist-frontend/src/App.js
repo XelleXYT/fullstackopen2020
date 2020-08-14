@@ -11,7 +11,7 @@ const App = () => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  
+
   const [user, setUser] = useState(null)
 
   const [message, setMessage] = useState(null)
@@ -21,7 +21,7 @@ const App = () => {
 
   const getBlogs = async () => {
     const blogs = await blogService.getAll()
-    setBlogs(blogs.sort((a,b)=> b.likes - a.likes))
+    setBlogs(blogs.sort((a,b) => b.likes - a.likes))
   }
 
   useEffect(() => {
@@ -122,8 +122,8 @@ const App = () => {
           <div>
             password <input type="password" value={password} name="Password" onChange={({ target }) => setPassword(target.value)} />
           </div>
-        <button type="submit">login</button>
-      </form>
+          <button type="submit">login</button>
+        </form>
       </div>
     )
   }
