@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import Message from './components/Message'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -16,6 +17,8 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+
+  const [newFormVisible, setNewFormVisible] = useState(false)
 
 
   useEffect(() => {
@@ -80,6 +83,7 @@ const App = () => {
       setTitle('')
       setAuthor('')
       setUrl('')
+      setNewFormVisible(false)
       setTimeout(() => {
         setMessage(null)
       }, 5000)
@@ -91,6 +95,22 @@ const App = () => {
         setMessage(null)
       }, 5000)
     }
+  }
+
+  const newBlogForm = () => {
+    const hideWhenVisible = { display: newFormVisible ? 'none' : '' }
+    const showWhenVisible = { display: newFormVisible ? '' : 'none' }
+    return(
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={()=>setNewFormVisible(true)}>Create new blog</button>
+        </div>
+        <div style={showWhenVisible}>
+          <BlogForm title={title} setTitle={setTitle} author={author} setAuthor={setAuthor} url={url} setUrl={setUrl} handleCreate={handleCreate}/>
+          <button onClick={()=>setNewFormVisible(false)}>cancel</button>
+        </div>
+      </div>
+    )
   }
 
   if (user === null) {
@@ -116,19 +136,7 @@ const App = () => {
       <h2>blogs</h2>
       <Message message={message} type={messageType} />
       <p>{`${user.name} logged in`} <button onClick={handleLogout}>logout</button></p>
-      <h2>create new</h2>
-      <form onSubmit={handleCreate}>
-          <div>
-            title <input type="text" value={title} name="Title" onChange={({ target }) => setTitle(target.value)} />
-          </div>
-          <div>
-            author <input type="text" value={author} name="Author" onChange={({ target }) => setAuthor(target.value)} />
-          </div>
-          <div>
-            url <input type="text" value={url} name="Url" onChange={({ target }) => setUrl(target.value)} />
-          </div>
-        <button type="submit">create</button>
-      </form>
+      {newBlogForm()}
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
