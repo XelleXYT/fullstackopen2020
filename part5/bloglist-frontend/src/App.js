@@ -19,11 +19,13 @@ const App = () => {
 
   const blogFormRef = useRef()
 
+  const getBlogs = async () => {
+    const blogs = await blogService.getAll()
+    setBlogs( blogs )
+  }
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+    getBlogs()
   }, [])
 
   useEffect(() => {
@@ -76,6 +78,7 @@ const App = () => {
       blogFormRef.current.toggleVisibility()
       await blogService.create(blogObject)
       handleMessage(`a new blog ${blogObject.title} by ${blogObject.author}`,'success')
+      getBlogs()
     } catch (e) {
       handleMessage(e.message, 'error')
     }
@@ -86,6 +89,15 @@ const App = () => {
       <BlogForm createBlog={addBlog}/>
     </Togglable>
   )
+
+  const likeBlog = async (blogObject) => {
+    try {
+      await blogService.update(blogObject._id, blogObject)
+      handleMessage(`Liked: ${blogObject.title} - Total likes: ${blogObject.likes}`, 'success')
+    } catch (e) {
+      handleMessage(e.message, 'error')
+    }
+  }
 
   if (user === null) {
     return (
@@ -112,7 +124,7 @@ const App = () => {
       <p>{`${user.name} logged in`} <button onClick={handleLogout}>logout</button></p>
       {newBlogForm()}
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} likeBlog={likeBlog}/>
       )}
     </div>
   )
