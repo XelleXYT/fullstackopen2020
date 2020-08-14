@@ -21,7 +21,7 @@ const App = () => {
 
   const getBlogs = async () => {
     const blogs = await blogService.getAll()
-    setBlogs( blogs )
+    setBlogs(blogs.sort((a,b)=> b.likes - a.likes))
   }
 
   useEffect(() => {
@@ -94,6 +94,7 @@ const App = () => {
     try {
       await blogService.update(blogObject._id, blogObject)
       handleMessage(`Liked: ${blogObject.title} - Total likes: ${blogObject.likes}`, 'success')
+      getBlogs()
     } catch (e) {
       handleMessage(e.message, 'error')
     }
