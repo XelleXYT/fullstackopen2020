@@ -1,24 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Message from './components/Message'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  
   const [user, setUser] = useState(null)
 
   const [message, setMessage] = useState(null)
   const [messageType, setMessageType] = useState('error')
 
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
-
-  const [newFormVisible, setNewFormVisible] = useState(false)
+  const blogFormRef = useRef()
 
 
   useEffect(() => {
@@ -35,6 +34,14 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  const handleMessage = async (message, type) => {
+    setMessage(message)
+    setMessageType(type)
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -53,11 +60,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setMessage('wrong username or password')
-      setMessageType('error')
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      handleMessage('wrong username or password', 'error')
     }
   }
 
@@ -68,50 +71,21 @@ const App = () => {
     setUser(null)
   }
 
-  const handleCreate = async (event) => {
-    event.preventDefault()
+  const addBlog = async (blogObject) => {
     try {
-      const blog = {
-        title,
-        author,
-        url
-      }
-
-      await blogService.create(blog)
-      setMessage(`a new blog ${blog.title} by ${blog.author}`)
-      setMessageType('success')
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      setNewFormVisible(false)
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
-
+      blogFormRef.current.toggleVisibility()
+      await blogService.create(blogObject)
+      handleMessage(`a new blog ${blogObject.title} by ${blogObject.author}`,'success')
     } catch (e) {
-      setMessage(e.message)
-      setMessageType('error')
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      handleMessage(e.message, 'error')
     }
   }
 
-  const newBlogForm = () => {
-    const hideWhenVisible = { display: newFormVisible ? 'none' : '' }
-    const showWhenVisible = { display: newFormVisible ? '' : 'none' }
-    return(
-      <div>
-        <div style={hideWhenVisible}>
-          <button onClick={()=>setNewFormVisible(true)}>Create new blog</button>
-        </div>
-        <div style={showWhenVisible}>
-          <BlogForm title={title} setTitle={setTitle} author={author} setAuthor={setAuthor} url={url} setUrl={setUrl} handleCreate={handleCreate}/>
-          <button onClick={()=>setNewFormVisible(false)}>cancel</button>
-        </div>
-      </div>
-    )
-  }
+  const newBlogForm = () => (
+    <Togglable buttonLabel='new blog' ref={blogFormRef}>
+      <BlogForm createBlog={addBlog}/>
+    </Togglable>
+  )
 
   if (user === null) {
     return (
