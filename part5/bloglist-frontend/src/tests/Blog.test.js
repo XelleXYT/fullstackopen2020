@@ -79,4 +79,21 @@ describe('<Blog />', () => {
     expect(togglableHide).toHaveStyle('display: none')
 
   })
+
+  test('check like button', () => {
+
+    const likeBlog = jest.fn()
+
+    const component = render(
+      <Blog blog={blog} likeBlog={likeBlog} currentUser={{username:'TestUserUsername', user:'TestUserName'}} removeBlog={()=>{}}/>
+    )
+
+    const button = component.getByText('like')
+
+    expect(likeBlog.mock.calls).toHaveLength(0)
+    fireEvent.click(button)
+    expect(likeBlog.mock.calls).toHaveLength(1)
+    fireEvent.click(button)
+    expect(likeBlog.mock.calls).toHaveLength(2)
+  })
 })
