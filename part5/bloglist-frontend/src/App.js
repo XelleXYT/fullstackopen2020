@@ -100,6 +100,16 @@ const App = () => {
     }
   }
 
+  const removeBlog = async (blogObject) => {
+    try {
+      await blogService.remove(blogObject._id)
+      handleMessage(`Removed blog: ${blogObject.title} by ${blogObject.author}`, 'success')
+      getBlogs()
+    } catch (e) {
+      handleMessage(e.message, 'error')
+    }
+  }
+
   if (user === null) {
     return (
       <div>
@@ -125,7 +135,7 @@ const App = () => {
       <p>{`${user.name} logged in`} <button onClick={handleLogout}>logout</button></p>
       {newBlogForm()}
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} likeBlog={likeBlog}/>
+        <Blog key={blog.id} blog={blog} likeBlog={likeBlog} currentUser={user} removeBlog={removeBlog} />
       )}
     </div>
   )
