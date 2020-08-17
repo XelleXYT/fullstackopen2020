@@ -6,6 +6,12 @@ describe('Blog app', function() {
     password: 'salainen'
   }
 
+  const blog = {
+    title: 'XelleX.es',
+    author: 'Alejandro Luna',
+    url: 'https://xellex.es'
+  }
+
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3001/api/testing/reset')
     cy.request('POST', 'http://localhost:3001/api/users/', user) 
@@ -34,4 +40,26 @@ describe('Blog app', function() {
     })
 
   })
+
+  describe.only('When logged in', function() {
+    
+    beforeEach(function() {
+      cy.get('#username').type(user.username)
+      cy.get('#password').type(user.password)
+      cy.get('#loginbtn').click()
+    })
+
+    it('A blog can be created', function() {
+      cy.contains('new blog').click()
+      cy.get('#title').type(blog.title)
+      cy.get('#author').type(blog.author)
+      cy.get('#url').type(blog.url)
+      cy.get('#createbtn').click()
+      cy.get('#message').contains(`a new blog ${blog.title} by ${blog.author}`)
+      cy.get('#message').should('to.have.class','success')
+      cy.get('.blog').contains(`${blog.title} - ${blog.author}`)
+    })
+
+  })
+
 })
