@@ -5,7 +5,7 @@ const Message = (props) => {
   const { message, type } = props
   if(message){
     return(
-      <div className={type}>{message}</div>
+      <div id="message" className={type}>{message}</div>
     )
   } else {
     return(<></>)
