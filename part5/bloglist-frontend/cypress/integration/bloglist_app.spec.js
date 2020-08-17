@@ -6,6 +6,12 @@ describe('Blog app', function() {
     password: 'salainen'
   }
 
+  const user2 = {
+    name: 'Prueba2',
+    username: 'Prueba2',
+    password: 'Prueba2'
+  }
+
   const blog = {
     title: 'XelleX.es',
     author: 'Alejandro Luna',
@@ -14,7 +20,8 @@ describe('Blog app', function() {
 
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3001/api/testing/reset')
-    cy.request('POST', 'http://localhost:3001/api/users/', user) 
+    cy.request('POST', 'http://localhost:3001/api/users/', user)
+    cy.request('POST', 'http://localhost:3001/api/users/', user2)
     cy.visit('http://localhost:3000')
   })
 
@@ -77,6 +84,23 @@ describe('Blog app', function() {
         cy.get('#message').contains(`Liked: ${blog.title} - Total likes: 1`)
         cy.get('#message').should('to.have.class','success')
         cy.get('.blog').contains('likes 1')
+      })
+
+      it('A blog can be deleted by the owner', function() {
+        cy.get('.blog').contains('show').click()
+        cy.get('.blog').contains('remove').click()
+        cy.get('#message').contains(`Removed blog: ${blog.title} by ${blog.author}`)
+        cy.get('#message').should('to.have.class','success')
+        cy.get({}).should('not.contain',blog.title)
+      })
+
+      it('A blog cannot be deleted by other user',function(){
+        cy.contains('logout').click()
+        cy.get('#username').type(user2.username)
+        cy.get('#password').type(user2.password)
+        cy.get('#loginbtn').click()
+        cy.get('.blog').contains('show').click()
+        cy.get('.blog').should('not.contain','remove')
       })
 
     })
