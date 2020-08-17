@@ -134,9 +134,11 @@ const App = () => {
       <Message message={message} type={messageType} />
       <p>{`${user.name} logged in`} <button onClick={handleLogout}>logout</button></p>
       {newBlogForm()}
+      <div className="blogs">
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} likeBlog={likeBlog} currentUser={user} removeBlog={removeBlog} />
       )}
+      </div>
     </div>
   )
 }

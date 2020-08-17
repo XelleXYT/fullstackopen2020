@@ -18,6 +18,12 @@ describe('Blog app', function() {
     url: 'https://xellex.es'
   }
 
+  const blog2 = {
+    title: 'Google.es',
+    author: 'Google',
+    url: 'https://google.es'
+  }
+
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3001/api/testing/reset')
     cy.request('POST', 'http://localhost:3001/api/users/', user)
@@ -67,7 +73,7 @@ describe('Blog app', function() {
       cy.get('.blog').contains(`${blog.title} - ${blog.author}`)
     })
 
-    describe.only('When a blog is created', function() {
+    describe('When a blog is created', function() {
       
       beforeEach(function() {
         cy.contains('new blog').click()
@@ -94,13 +100,34 @@ describe('Blog app', function() {
         cy.get({}).should('not.contain',blog.title)
       })
 
-      it('A blog cannot be deleted by other user',function(){
+      it('A blog cannot be deleted by other user',function() {
         cy.contains('logout').click()
         cy.get('#username').type(user2.username)
         cy.get('#password').type(user2.password)
         cy.get('#loginbtn').click()
         cy.get('.blog').contains('show').click()
         cy.get('.blog').should('not.contain','remove')
+      })
+
+      it.only('Blogs are ordered by likes', function() {
+        cy.contains('new blog').click()
+        cy.get('#title').type(blog2.title)
+        cy.get('#author').type(blog2.author)
+        cy.get('#url').type(blog2.url)
+        cy.get('#createbtn').click()
+        cy.contains(`${blog2.title} - ${blog2.author}`)
+        cy.get('.blog').eq(0).contains(blog.title)
+        cy.get('.blog').eq(1).contains(blog2.title)
+        cy.get('.blog').eq(1).contains('show').click()
+        cy.get('.blog').eq(1).contains('like').click()
+        cy.wait(500)
+        cy.get('.blog').eq(0).contains(blog2.title)
+        cy.get('.blog').eq(1).contains(blog.title)
+        cy.get('.blog').eq(1).contains('show').click()
+        cy.get('.blog').eq(1).contains('like').click()
+        cy.wait(500)
+        cy.get('.blog').eq(0).contains(blog.title)
+        cy.get('.blog').eq(1).contains(blog2.title)
       })
 
     })
