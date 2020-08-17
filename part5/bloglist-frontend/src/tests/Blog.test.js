@@ -9,12 +9,12 @@ const blog = {
   url: 'TestUrl',
   likes: 10,
   user: {
-      username: 'TestUserUsername',
-      name: 'TestUserName'
+    username: 'TestUserUsername',
+    name: 'TestUserName'
   }
 }
 
-/* 
+/*
   IMPORTANT:
     I've used the Togglable to do the blogs show/hide info.
     It renders all content everytime, but shows only what it need to show.
@@ -22,7 +22,7 @@ const blog = {
 describe('<Blog />', () => {
   test('shows only title and author', () => {
     const component = render(
-      <Blog blog={blog} likeBlog={()=>{}} currentUser={{username:'TestUserUsername', user:'TestUserName'}} removeBlog={()=>{}}/>
+      <Blog blog={blog} likeBlog={() => {}} currentUser={{ username:'TestUserUsername', user:'TestUserName' }} removeBlog={() => {}}/>
     )
 
     const div = component.container.querySelector('.blog')
@@ -38,9 +38,9 @@ describe('<Blog />', () => {
 
   test('shows url and likes too', () => {
     const component = render(
-      <Blog blog={blog} likeBlog={()=>{}} currentUser={{username:'TestUserUsername', user:'TestUserName'}} removeBlog={()=>{}}/>
+      <Blog blog={blog} likeBlog={() => {}} currentUser={{ username:'TestUserUsername', user:'TestUserName' }} removeBlog={() => {}}/>
     )
-    
+
     const button = component.getByText('show')
     fireEvent.click(button)
 
@@ -57,9 +57,9 @@ describe('<Blog />', () => {
 
   test('hides url and likes', () => {
     const component = render(
-      <Blog blog={blog} likeBlog={()=>{}} currentUser={{username:'TestUserUsername', user:'TestUserName'}} removeBlog={()=>{}}/>
+      <Blog blog={blog} likeBlog={() => {}} currentUser={{ username:'TestUserUsername', user:'TestUserName' }} removeBlog={() => {}}/>
     )
-    
+
     const buttonShow = component.getByText('show')
     fireEvent.click(buttonShow)
 
@@ -85,7 +85,7 @@ describe('<Blog />', () => {
     const likeBlog = jest.fn()
 
     const component = render(
-      <Blog blog={blog} likeBlog={likeBlog} currentUser={{username:'TestUserUsername', user:'TestUserName'}} removeBlog={()=>{}}/>
+      <Blog blog={blog} likeBlog={likeBlog} currentUser={{ username:'TestUserUsername', user:'TestUserName' }} removeBlog={() => {}}/>
     )
 
     const button = component.getByText('like')
