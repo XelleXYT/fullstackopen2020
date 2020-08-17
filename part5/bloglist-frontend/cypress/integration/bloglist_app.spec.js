@@ -41,7 +41,7 @@ describe('Blog app', function() {
 
   })
 
-  describe.only('When logged in', function() {
+  describe('When logged in', function() {
     
     beforeEach(function() {
       cy.get('#username').type(user.username)
@@ -58,6 +58,27 @@ describe('Blog app', function() {
       cy.get('#message').contains(`a new blog ${blog.title} by ${blog.author}`)
       cy.get('#message').should('to.have.class','success')
       cy.get('.blog').contains(`${blog.title} - ${blog.author}`)
+    })
+
+    describe.only('When a blog is created', function() {
+      
+      beforeEach(function() {
+        cy.contains('new blog').click()
+        cy.get('#title').type(blog.title)
+        cy.get('#author').type(blog.author)
+        cy.get('#url').type(blog.url)
+        cy.get('#createbtn').click()
+      })
+
+      it('A blog can be liked', function() {
+        cy.get('.blog').contains('show').click()
+        cy.get('.blog').contains('likes 0')
+        cy.get('.blog').contains('like').click()
+        cy.get('#message').contains(`Liked: ${blog.title} - Total likes: 1`)
+        cy.get('#message').should('to.have.class','success')
+        cy.get('.blog').contains('likes 1')
+      })
+
     })
 
   })
