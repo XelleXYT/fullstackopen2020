@@ -8,6 +8,7 @@ const blogsRouter = require('./controllers/blogs')
 const middleware = require('./utils/middleware')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
+const testingRouter = require('./controllers/testing')
 require('express-async-errors')
 
 logger.info('connecting to', config.MONGODB_URI)
@@ -28,6 +29,10 @@ app.use('/api/login', loginRouter)
 
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
+
+if (process.env.NODE_ENV === 'test') {
+    app.use('/api/testing', testingRouter)
+}
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
