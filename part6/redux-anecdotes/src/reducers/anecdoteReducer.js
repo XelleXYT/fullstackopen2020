@@ -48,14 +48,14 @@ const reducer = (state = initialState, action) => {
 
 export const voteAnecdote = (id) => {
   return {
-    type: 'VOTE_ANECDOTE',
+    type: 'VOTE_ANECDOTE', 
     data: { id }
   }
 }
 
 export const addAnecdote = (content) => {
   return {
-    type: 'ADD_ANECDOTE',
+    type: 'ADD_ANECDOTE', 
     data: { content }
   }
 }
