@@ -12,9 +12,11 @@ const Notification = () => {
   const notification = useSelector(state => state.notification)
 
   return (
+    notification ?
     <div style={style}>
       {notification}
-    </div>
+    </div> 
+    : <></>
   )
 }
 
