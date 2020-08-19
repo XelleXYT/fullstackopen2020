@@ -1,4 +1,5 @@
 const initialState = null
+var auxTimeout = null
 
 const reducer = (state = initialState, action) => {
   switch(action.type){
@@ -25,7 +26,8 @@ const deleteNotification = () => {
 
 export const setTimedNotification = (notification, shownTime) => async (dispatch) => {
   dispatch(setNotification(notification))
-  setTimeout(() => {
+  clearTimeout(auxTimeout)
+  auxTimeout = setTimeout(() => {
     dispatch(deleteNotification())
   }, shownTime*1000)
 }
