@@ -1,0 +1,21 @@
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "Prueba1",
+    "name": "Prueba1",
+    "password": "Prueba1"
+}
+
+
+###
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBydWViYTEiLCJpZCI6IjVmMzUwNjZhNDBhYjRlNTM2OGIyM2IxOCIsImlhdCI6MTU5NzMxMTcxMH0.4QfoB5ZH5hUN87c7FaTCGaxt0D1vFDcml6ZP2glHgrQ
+
+{
+    "url": "https://xellex.es/PruebaTOKEN",
+    "title": "PruebaTOKEN",
+    "author": "Alejandro Luna"
+}
