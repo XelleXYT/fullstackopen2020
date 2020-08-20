@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
-import Message from './components/Message'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 
-const App = () => {
+import { setTimedNotification } from './reducers/notificationReducer'
+import { useDispatch } from 'react-redux'
+
+const App = (props) => {
+
   const [blogs, setBlogs] = useState([])
 
   const [username, setUsername] = useState('')
@@ -14,10 +18,9 @@ const App = () => {
 
   const [user, setUser] = useState(null)
 
-  const [message, setMessage] = useState(null)
-  const [messageType, setMessageType] = useState('error')
-
   const blogFormRef = useRef()
+
+  const dispatch = useDispatch()
 
   const getBlogs = async () => {
     const blogs = await blogService.getAll()
@@ -37,14 +40,6 @@ const App = () => {
     }
   }, [])
 
-  const handleMessage = async (message, type) => {
-    setMessage(message)
-    setMessageType(type)
-    setTimeout(() => {
-      setMessage(null)
-    }, 5000)
-  }
-
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -62,7 +57,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      handleMessage('wrong username or password', 'error')
+      dispatch(setTimedNotification('wrong username or password', 'error', 5))
     }
   }
 
@@ -77,10 +72,10 @@ const App = () => {
     try {
       blogFormRef.current.toggleVisibility()
       await blogService.create(blogObject)
-      handleMessage(`a new blog ${blogObject.title} by ${blogObject.author}`,'success')
+      dispatch(setTimedNotification(`a new blog ${blogObject.title} by ${blogObject.author}`,'success', 5))
       getBlogs()
     } catch (e) {
-      handleMessage(e.message, 'error')
+      dispatch(setTimedNotification(e.notification, 'error', 5))
     }
   }
 
@@ -93,20 +88,20 @@ const App = () => {
   const likeBlog = async (blogObject) => {
     try {
       await blogService.update(blogObject._id, blogObject)
-      handleMessage(`Liked: ${blogObject.title} - Total likes: ${blogObject.likes}`, 'success')
+      dispatch(setTimedNotification(`Liked: ${blogObject.title} - Total likes: ${blogObject.likes}`, 'success', 5))
       getBlogs()
     } catch (e) {
-      handleMessage(e.message, 'error')
+      dispatch(setTimedNotification(e.notification, 'error', 5))
     }
   }
 
   const removeBlog = async (blogObject) => {
     try {
       await blogService.remove(blogObject._id)
-      handleMessage(`Removed blog: ${blogObject.title} by ${blogObject.author}`, 'success')
+      dispatch(setTimedNotification(`Removed blog: ${blogObject.title} by ${blogObject.author}`, 'success', 5))
       getBlogs()
     } catch (e) {
-      handleMessage(e.message, 'error')
+      dispatch(setTimedNotification(e.notification, 'error', 5))
     }
   }
 
@@ -114,7 +109,7 @@ const App = () => {
     return (
       <div>
         <h2>log in to application</h2>
-        <Message message={message} type={messageType} />
+        <Notification />
         <form onSubmit={handleLogin}>
           <div>
             username <input id="username" type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)} />
@@ -131,7 +126,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Message message={message} type={messageType} />
+      <Notification />
       <p>{`${user.name} logged in`} <button onClick={handleLogout}>logout</button></p>
       {newBlogForm()}
       <div className="blogs">

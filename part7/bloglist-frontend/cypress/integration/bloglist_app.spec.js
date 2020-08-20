@@ -48,8 +48,8 @@ describe('Blog app', function() {
       cy.get('#username').type('asdf')
       cy.get('#password').type('fdsa')
       cy.get('#loginbtn').click()
-      cy.get('#message').contains('wrong username or password')
-      cy.get('#message').should('to.have.class','error')
+      cy.get('#notification').contains('wrong username or password')
+      cy.get('#notification').should('to.have.class','error')
     })
 
   })
@@ -68,8 +68,8 @@ describe('Blog app', function() {
       cy.get('#author').type(blog.author)
       cy.get('#url').type(blog.url)
       cy.get('#createbtn').click()
-      cy.get('#message').contains(`a new blog ${blog.title} by ${blog.author}`)
-      cy.get('#message').should('to.have.class','success')
+      cy.get('#notification').contains(`a new blog ${blog.title} by ${blog.author}`)
+      cy.get('#notification').should('to.have.class','success')
       cy.get('.blog').contains(`${blog.title} - ${blog.author}`)
     })
 
@@ -87,16 +87,16 @@ describe('Blog app', function() {
         cy.get('.blog').contains('show').click()
         cy.get('.blog').contains('likes 0')
         cy.get('.blog').contains('like').click()
-        cy.get('#message').contains(`Liked: ${blog.title} - Total likes: 1`)
-        cy.get('#message').should('to.have.class','success')
+        cy.get('#notification').contains(`Liked: ${blog.title} - Total likes: 1`)
+        cy.get('#notification').should('to.have.class','success')
         cy.get('.blog').contains('likes 1')
       })
 
       it('A blog can be deleted by the owner', function() {
         cy.get('.blog').contains('show').click()
         cy.get('.blog').contains('remove').click()
-        cy.get('#message').contains(`Removed blog: ${blog.title} by ${blog.author}`)
-        cy.get('#message').should('to.have.class','success')
+        cy.get('#notification').contains(`Removed blog: ${blog.title} by ${blog.author}`)
+        cy.get('#notification').should('to.have.class','success')
         cy.get({}).should('not.contain',blog.title)
       })
 
