@@ -5,6 +5,7 @@ import About from './Modules/About'
 import Footer from './Modules/Footer'
 import AnecdoteList from './Modules/AnecdoteList'
 import CreateNew from './Modules/CreateNew'
+import Anecdote from './Modules/Anecdote'
 
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -58,6 +59,9 @@ const App = () => {
         </Route>
         <Route path="/about">
           <About />
+        </Route>
+        <Route path="/anecdotes/:id">
+          <Anecdote anecdotes={anecdotes} />
         </Route>
         <Route path="/">
           <AnecdoteList anecdotes={anecdotes} />
