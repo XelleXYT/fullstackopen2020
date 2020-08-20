@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
+import { Redirect } from 'react-router-dom'
 
 const CreateNew = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
 
+  const [uploaded, setUploaded] = useState(false)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -14,6 +16,7 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    setUploaded(true)
   }
 
   return (
@@ -32,8 +35,9 @@ const CreateNew = (props) => {
           url for more info
           <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
         </div>
-        <button>create</button>
+          <button>create</button>
       </form>
+      {uploaded ? <Redirect to="/"/> : null}
     </div>
   )
   

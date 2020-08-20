@@ -1,11 +1,8 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
 
 const Anecdote = (props) => {
-  const { anecdotes } = props
 
-  const id = useParams().id
-  const anecdote = anecdotes.find(anec => anec.id === id)
+  const { anecdote } = props
 
   return (
     <div>
