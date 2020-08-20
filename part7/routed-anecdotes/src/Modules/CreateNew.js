@@ -44,7 +44,7 @@ const CreateNew = (props) => {
           url for more info
           <input name='info' type={info.type} value={info.value} onChange={info.onChange} />
         </div>
-          <button>create</button> <button onClick={resetFields}>reset</button>
+          <button>create</button> <button onClick={resetFields}>reset</button> 
       </form>
       {uploaded ? <Redirect to="/"/> : null}
     </div>
