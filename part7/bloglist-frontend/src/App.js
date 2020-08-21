@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
+import BlogList from './components/BlogList'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -7,11 +7,10 @@ import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 
 import { setTimedNotification } from './reducers/notificationReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 
 const App = (props) => {
-
-  const [blogs, setBlogs] = useState([])
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -22,14 +21,9 @@ const App = (props) => {
 
   const dispatch = useDispatch()
 
-  const getBlogs = async () => {
-    const blogs = await blogService.getAll()
-    setBlogs(blogs.sort((a,b) => b.likes - a.likes))
-  }
-
-  useEffect(() => {
-    getBlogs()
-  }, [])
+  useEffect(()=> {
+    dispatch(initializeBlogs())
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -56,6 +50,7 @@ const App = (props) => {
       setUser(user)
       setUsername('')
       setPassword('')
+      dispatch(setTimedNotification('', 'success', 5))
     } catch (exception) {
       dispatch(setTimedNotification('wrong username or password', 'error', 5))
     }
@@ -66,43 +61,6 @@ const App = (props) => {
     blogService.setToken(null)
     window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
-  }
-
-  const addBlog = async (blogObject) => {
-    try {
-      blogFormRef.current.toggleVisibility()
-      await blogService.create(blogObject)
-      dispatch(setTimedNotification(`a new blog ${blogObject.title} by ${blogObject.author}`,'success', 5))
-      getBlogs()
-    } catch (e) {
-      dispatch(setTimedNotification(e.notification, 'error', 5))
-    }
-  }
-
-  const newBlogForm = () => (
-    <Togglable buttonLabel='new blog' buttonSecondLabel='cancel' ref={blogFormRef}>
-      <BlogForm createBlog={addBlog}/>
-    </Togglable>
-  )
-
-  const likeBlog = async (blogObject) => {
-    try {
-      await blogService.update(blogObject._id, blogObject)
-      dispatch(setTimedNotification(`Liked: ${blogObject.title} - Total likes: ${blogObject.likes}`, 'success', 5))
-      getBlogs()
-    } catch (e) {
-      dispatch(setTimedNotification(e.notification, 'error', 5))
-    }
-  }
-
-  const removeBlog = async (blogObject) => {
-    try {
-      await blogService.remove(blogObject._id)
-      dispatch(setTimedNotification(`Removed blog: ${blogObject.title} by ${blogObject.author}`, 'success', 5))
-      getBlogs()
-    } catch (e) {
-      dispatch(setTimedNotification(e.notification, 'error', 5))
-    }
   }
 
   if (user === null) {
@@ -128,12 +86,10 @@ const App = (props) => {
       <h2>blogs</h2>
       <Notification />
       <p>{`${user.name} logged in`} <button onClick={handleLogout}>logout</button></p>
-      {newBlogForm()}
-      <div className="blogs">
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} likeBlog={likeBlog} currentUser={user} removeBlog={removeBlog} />
-      )}
-      </div>
+      <Togglable buttonLabel='new blog' buttonSecondLabel='cancel' ref={blogFormRef}>
+        <BlogForm blogFormRef={blogFormRef}/>
+      </Togglable>
+      <BlogList user={user}/>
     </div>
   )
 }

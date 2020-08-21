@@ -1,53 +1,33 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Togglable from './Togglable'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { likeBlog, deleteBlog } from '../reducers/blogReducer'
+import { setTimedNotification } from '../reducers/notificationReducer'
 
 const Blog = (props) => {
 
-  const { blog, likeBlog, currentUser, removeBlog } = props
+  const { blog, currentUser } = props
 
-  const [likes, setLikes] = useState(blog.likes)
-
-  const addLike = async (event) => {
-    try {
-      event.preventDefault()
-      await likeBlog({
-        _id: blog.id,
-        title: blog.title,
-        author: blog.author,
-        url: blog.url,
-        likes: likes + 1
-      })
-      setLikes(likes + 1)
-    } catch (e) {
-      console.error(e)
-    }
-
+  const likeBlog = () => {
+    props.likeBlog(blog)
+    props.setTimedNotification(`Liked ${blog.title}`,'success',5)
   }
 
-  const deleteBlog = async (event) => {
+  const deleteBlog = () => {
+    
     if(window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)){
-      try {
-        event.preventDefault()
-        await removeBlog({
-          _id: blog.id,
-          title: blog.title,
-          author: blog.author
-        })
-      } catch (e) {
-        console.error(e)
-      }
+      props.deleteBlog(blog)
+      props.setTimedNotification(`Removed blog ${blog.title} by ${blog.author}`, 'success', 5)
     }
   }
 
   const showRemoveBlog = () => {
-    if(currentUser.username === blog.user.username){
-      return(
-        <div><button onClick={deleteBlog}>remove</button></div>
-      )
-    }else{
-      return(<></>)
-    }
+    return (
+      currentUser.username === blog.user.username
+        ? <div><button onClick={()=>deleteBlog()}>remove</button></div>
+        : null
+    )
   }
 
   return(
@@ -55,7 +35,7 @@ const Blog = (props) => {
       <div className='blog-item'><b>{blog.title} - {blog.author}</b></div>
       <Togglable buttonLabel='show' buttonSecondLabel='hide'>
         <div className='blog-item'><a href={blog.url}>{blog.url}</a></div>
-        <div className='blog-item'>likes {likes} <button onClick={addLike}>like</button></div>
+        <div className='blog-item'>likes {blog.likes} <button onClick={()=>likeBlog()}>like</button></div>
         <div className='blog-item'>{blog.user.name}</div>
         {showRemoveBlog()}
       </Togglable>
@@ -65,9 +45,21 @@ const Blog = (props) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  likeBlog: PropTypes.func.isRequired,
-  currentUser: PropTypes.object.isRequired,
-  removeBlog: PropTypes.func.isRequired
+  currentUser: PropTypes.object.isRequired
 }
 
-export default Blog
+const mapStateToProps = (state) => {
+  return {
+    blogs: state.blogs
+  }
+}
+
+const mapDispatchToProps = {
+  likeBlog,
+  deleteBlog,
+  setTimedNotification
+}
+
+const ConnectedBlog = connect(mapStateToProps, mapDispatchToProps)(Blog)
+
+export default ConnectedBlog
