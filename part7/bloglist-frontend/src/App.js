@@ -8,18 +8,19 @@ import Togglable from './components/Togglable'
 
 import { setTimedNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { setUser } from './reducers/userReducer'
 
-const App = (props) => {
+const App = () => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const [user, setUser] = useState(null)
-
   const blogFormRef = useRef()
 
   const dispatch = useDispatch()
+
+  const user = useSelector(state => state.loggedUser)
 
   useEffect(()=> {
     dispatch(initializeBlogs())
@@ -29,25 +30,21 @@ const App = (props) => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      dispatch(setUser(user))
       blogService.setToken(user.token)
     }
-  }, [])
+  }, [dispatch])
 
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({
-        username, password,
-      })
-
+      const user = await loginService.login({username, password})
+      dispatch(setUser(user))
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
       )
 
       blogService.setToken(user.token)
-
-      setUser(user)
       setUsername('')
       setPassword('')
       dispatch(setTimedNotification('', 'success', 5))
@@ -60,7 +57,7 @@ const App = (props) => {
     event.preventDefault()
     blogService.setToken(null)
     window.localStorage.removeItem('loggedBlogappUser')
-    setUser(null)
+    dispatch(setUser(null))
   }
 
   if (user === null) {
@@ -85,7 +82,7 @@ const App = (props) => {
     <div>
       <h2>blogs</h2>
       <Notification />
-      <p>{`${user.name} logged in`} <button onClick={handleLogout}>logout</button></p>
+      <p>{`${user?.name} logged in`} <button onClick={handleLogout}>logout</button></p>
       <Togglable buttonLabel='new blog' buttonSecondLabel='cancel' ref={blogFormRef}>
         <BlogForm blogFormRef={blogFormRef}/>
       </Togglable>
