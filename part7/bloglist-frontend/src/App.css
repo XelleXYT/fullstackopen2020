@@ -67,3 +67,15 @@
 .blog-item {
   margin: 5px;
 }
+
+.menu {
+  border: 1px solid lightgray;
+  border-radius: 3px;
+  background-color: lightgray;
+  padding: 5px;
+}
+
+.menu div{
+  margin: 3px;
+  display: inline;
+}

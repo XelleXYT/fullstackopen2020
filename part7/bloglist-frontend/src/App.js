@@ -7,6 +7,8 @@ import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
 import User from './components/User'
+import BlogView from './components/BlogView'
+import Menu from './components/Menu'
 
 import { setTimedNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
@@ -14,7 +16,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from './reducers/userReducer'
 import { Switch, Route } from 'react-router-dom'
 import { initializeUsers } from './reducers/usersReducer'
-import BlogView from './components/BlogView'
 
 const App = () => {
 
@@ -63,13 +64,12 @@ const App = () => {
   }
 
   const handleLogout = async (event) => {
-    event.preventDefault()
     blogService.setToken(null)
     window.localStorage.removeItem('loggedBlogappUser')
     dispatch(setUser(null))
   }
 
-  if (user === null) {
+  if (!user) {
     return (
       <div>
         <h2>log in to application</h2>
@@ -89,9 +89,9 @@ const App = () => {
 
   return (
     <div>
+      <Menu userName={user?.name} handleLogout={handleLogout} />
       <h2>blogs</h2>
       <Notification />
-      <p>{`${user?.name} logged in`} <button onClick={handleLogout}>logout</button></p>
       <Switch>
         <Route path="/blogs/:id">
           <BlogView />
