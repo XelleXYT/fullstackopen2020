@@ -5,11 +5,14 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
+import Users from './components/Users'
 
 import { setTimedNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from './reducers/userReducer'
+import { Switch, Route } from 'react-router-dom'
+import { initializeUsers } from './reducers/usersReducer'
 
 const App = () => {
 
@@ -22,8 +25,12 @@ const App = () => {
 
   const user = useSelector(state => state.loggedUser)
 
-  useEffect(()=> {
+  useEffect(() => {
     dispatch(initializeBlogs())
+  }, [dispatch])
+
+  useEffect(() => {
+    dispatch(initializeUsers())
   }, [dispatch])
 
   useEffect(() => {
@@ -83,10 +90,17 @@ const App = () => {
       <h2>blogs</h2>
       <Notification />
       <p>{`${user?.name} logged in`} <button onClick={handleLogout}>logout</button></p>
-      <Togglable buttonLabel='new blog' buttonSecondLabel='cancel' ref={blogFormRef}>
-        <BlogForm blogFormRef={blogFormRef}/>
-      </Togglable>
-      <BlogList user={user}/>
+      <Switch>
+        <Route path="/users">
+          <Users />
+        </Route>
+        <Route path="/">
+          <Togglable buttonLabel='new blog' buttonSecondLabel='cancel' ref={blogFormRef}>
+            <BlogForm blogFormRef={blogFormRef}/>
+          </Togglable>
+          <BlogList user={user}/>
+        </Route>
+      </Switch>
     </div>
   )
 }
