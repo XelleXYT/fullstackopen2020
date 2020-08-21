@@ -6,6 +6,7 @@ import loginService from './services/login'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
+import User from './components/User'
 
 import { setTimedNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
@@ -91,6 +92,9 @@ const App = () => {
       <Notification />
       <p>{`${user?.name} logged in`} <button onClick={handleLogout}>logout</button></p>
       <Switch>
+        <Route path="/users/:id">
+          <User />
+        </Route>
         <Route path="/users">
           <Users />
         </Route>
