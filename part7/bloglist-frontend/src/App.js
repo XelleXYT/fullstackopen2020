@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from './reducers/userReducer'
 import { Switch, Route } from 'react-router-dom'
 import { initializeUsers } from './reducers/usersReducer'
+import BlogView from './components/BlogView'
 
 const App = () => {
 
@@ -92,6 +93,9 @@ const App = () => {
       <Notification />
       <p>{`${user?.name} logged in`} <button onClick={handleLogout}>logout</button></p>
       <Switch>
+        <Route path="/blogs/:id">
+          <BlogView />
+        </Route>
         <Route path="/users/:id">
           <User />
         </Route>
