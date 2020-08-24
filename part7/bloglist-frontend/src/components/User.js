@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { useRouteMatch } from 'react-router-dom'
+import { Table } from 'react-bootstrap'
 
 const User = (props) => {
 
@@ -15,9 +16,15 @@ const User = (props) => {
       <>
         <h2>{user.name}</h2>
         <h3>Added blogs</h3>
-        <ul>
-          {user.blogs.map(b => <li key={b.id}>{b.title}</li>)}
-        </ul>
+        <Table size="sm" striped>
+          <tbody>
+            {user.blogs.map(b=>
+              <tr key={b.id}>
+               <td>{b.title}</td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
       </> 
       : null
   )

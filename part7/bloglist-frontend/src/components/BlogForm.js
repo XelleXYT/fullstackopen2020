@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
 import { setTimedNotification } from '../reducers/notificationReducer'
+import { Form, Button, FormLabel, FormControl } from 'react-bootstrap'
 
 const BlogForm = (props) => {
 
@@ -28,21 +29,19 @@ const BlogForm = (props) => {
   return(
     <>
       <h2>create new</h2>
-      <form onSubmit={addBlog}>
-        <div>
-          title
-          <input id="title" type="text" name="Title" />
-        </div>
-        <div>
-          author
-          <input id="author" type="text" name="Author" />
-        </div>
-        <div>
-          url
-          <input id="url" type="text" name="Url" />
-        </div>
-        <button id="createbtn" type="submit">create</button>
-      </form>
+      <Form onSubmit={addBlog}>
+        <Form.Group>
+          <FormLabel>title:</FormLabel>
+          <FormControl id="title" type="text" name="Title" />
+          <FormLabel>author:</FormLabel>
+          <FormControl id="author" type="text" name="Author" />
+          <FormLabel>url:</FormLabel>
+          <FormControl id="url" type="text" name="Url" />
+          <Button id="createbtn" type="submit" variant="primary">
+            create
+          </Button>
+        </Form.Group>
+      </Form>
     </>
   )
 

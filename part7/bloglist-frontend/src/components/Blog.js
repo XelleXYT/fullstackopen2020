@@ -8,9 +8,16 @@ const Blog = (props) => {
   const { blog } = props
 
   return(
-    <div className='blog'>
-      <div className='blog-item'><Link to={`/blogs/${blog.id}`}>{blog.title} - {blog.author}</Link></div>
-    </div>
+    <tr>
+      <td>
+        <Link to={`/blogs/${blog.id}`}>
+          {blog.title}
+        </Link>
+      </td>
+      <td>
+        {blog.author}
+      </td>
+    </tr>
   )
 }
 

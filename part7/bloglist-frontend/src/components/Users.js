@@ -1,12 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { Table } from 'react-bootstrap'
 
 const Users = (props) => {
   return (
     <>
       <h2>Users</h2>
-      <table>
+      <Table striped hover>
         <thead>
           <tr>
             <th>User</th>
@@ -25,7 +26,7 @@ const Users = (props) => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
     </>
   )
 }

@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from './reducers/userReducer'
 import { Switch, Route } from 'react-router-dom'
 import { initializeUsers } from './reducers/usersReducer'
+import { Form, Button } from 'react-bootstrap'
 
 const App = () => {
 
@@ -57,9 +58,9 @@ const App = () => {
       blogService.setToken(user.token)
       setUsername('')
       setPassword('')
-      dispatch(setTimedNotification('', 'success', 5))
+      dispatch(setTimedNotification('Logged in', 'info', 5))
     } catch (exception) {
-      dispatch(setTimedNotification('wrong username or password', 'error', 5))
+      dispatch(setTimedNotification('wrong username or password', 'danger', 5))
     }
   }
 
@@ -71,29 +72,31 @@ const App = () => {
 
   if (!user) {
     return (
-      <div>
+      <div className="container">
         <h2>log in to application</h2>
         <Notification />
-        <form onSubmit={handleLogin}>
-          <div>
-            username <input id="username" type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)} />
-          </div>
-          <div>
-            password <input id="password" type="password" value={password} name="Password" onChange={({ target }) => setPassword(target.value)} />
-          </div>
-          <button id="loginbtn" type="submit">login</button>
-        </form>
+        <Form onSubmit={handleLogin}>
+          <Form.Group>
+            <Form.Label>username:</Form.Label>
+            <Form.Control id="username" type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)} />
+            <Form.Label>password:</Form.Label>
+            <Form.Control id="password" type="password" value={password} name="Password" onChange={({ target }) => setPassword(target.value)} />
+            <Button variant="outline-primary" id="loginbtn" type="submit">
+              login
+            </Button>
+          </Form.Group>
+        </Form>
       </div>
     )
   }
 
   return (
-    <div>
+    <div className="container">
       <Menu userName={user?.name} handleLogout={handleLogout} />
-      <h2>blogs</h2>
       <Notification />
       <Switch>
         <Route path="/blogs/:id">
+          <h2>Blogs</h2>
           <BlogView />
         </Route>
         <Route path="/users/:id">
@@ -103,6 +106,7 @@ const App = () => {
           <Users />
         </Route>
         <Route path="/">
+          <h2>Blogs</h2>
           <Togglable buttonLabel='new blog' buttonSecondLabel='cancel' ref={blogFormRef}>
             <BlogForm blogFormRef={blogFormRef}/>
           </Togglable>
