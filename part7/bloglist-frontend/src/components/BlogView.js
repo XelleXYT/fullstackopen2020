@@ -27,7 +27,7 @@ const BlogView = (props) => {
         <div><a href={blog.url}>{blog.url}</a></div>
         <div>{blog.likes} likes <button onClick={()=>voteBlog()}>like</button></div>
         <div>added by {blog.user.username}</div>
-        <Comments comments={blog.comments} />
+        <Comments />
       </>
       : null
   )
