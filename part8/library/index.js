@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, UserInputError, gql } = require('apollo-server')
 const mongoose = require('mongoose')
 const Book = require('./models/book')
 const Author = require('./models/author')
@@ -100,6 +100,9 @@ const resolvers = {
         return book
       } catch (e) {
         console.error(e)
+        throw new UserInputError(e.message, {
+          invalidArgs: args,
+        })
       }
     },
     editAuthor: async (root, args) => {
@@ -111,6 +114,9 @@ const resolvers = {
         return author
       } catch (e) {
         console.error(e)
+        throw new UserInputError(e.message, {
+          invalidArgs: args,
+        })
       }
     }
   }
