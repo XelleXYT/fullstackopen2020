@@ -150,7 +150,7 @@ const resolvers = {
       }
     },
     createUser: (root, args) => {
-      const user = new User({ username: args.username })
+      const user = new User({ ...args })
       return user.save()
         .catch(error => {
           throw new UserInputError(error.message, {
@@ -181,7 +181,7 @@ const server = new ApolloServer({
       const decodedToken = jwt.verify(
         auth.substring(7), config.JWT_SECRET
       )
-      const currentUser = await User.findById(decodedToken.id).populate('favoriteGenre')
+      const currentUser = await User.findById(decodedToken.id)
       return { currentUser }
     }
   }
