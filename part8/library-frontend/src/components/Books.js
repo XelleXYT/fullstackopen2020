@@ -10,8 +10,8 @@ const Books = (props) => {
   const result = useQuery(ALL_BOOKS)
 
   useSubscription(BOOK_ADDED, {
-    onSubscriptionData: ({ subscriptionData }) => {
-      alert(`New book: ${subscriptionData.data.bookAdded.title} by ${subscriptionData.data.bookAdded.author.name}`)
+    onSubscriptionData: () => {
+      result.refetch()
     }
   })
 
