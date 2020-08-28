@@ -108,10 +108,7 @@ const resolvers = {
     }
   },
   Author: {
-    bookCount: async (root) => {
-      const books = await Book.find({author: root._id})
-      return books && books.length || 0
-    }
+    bookCount: async (root) => {return root.books.length}
   },
   Mutation: {
     addBook: async (root, args, context) => {
@@ -130,6 +127,9 @@ const resolvers = {
         }
         const book = new Book({ ...args, author })
         await book.save()
+
+        author.books = author.books.concat(book)
+        await author.save()
 
         pubsub.publish('BOOK_ADDED', {bookAdded: book})
 
