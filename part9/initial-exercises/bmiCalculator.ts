@@ -23,4 +23,17 @@ const calculateBmi = (height:number, weight:number):string => {
   }
 }
 
-console.log(calculateBmi(165,70))
+if(process.argv.length < 4) throw new Error('Not enought arguments')
+if(process.argv.length > 4) throw new Error('Too many arguments')
+
+if(isNaN(Number(process.argv[2])) || isNaN(Number(process.argv[3]))) throw new Error('Provided values were not numbers!')
+
+try {
+  const height = Number(process.argv[2])
+  const weight = Number(process.argv[3])
+  console.log(calculateBmi(height, weight))
+} catch (e) {
+  console.error(e.message)
+}
+
+

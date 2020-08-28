@@ -44,4 +44,23 @@ const calculateExercises = (dailyExerciseHours:Array<number>, target:number):Exe
   return stats
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1],2))
+try {
+  let dailyExerciseHours = [0]
+  let target = 0
+  if(process.argv.length > 4) {
+    let auxDailyExerciseHours:Array<number> = []
+    for(var i = 3; i < process.argv.length; i++){
+      auxDailyExerciseHours.push(Number(process.argv[i]))
+      if(isNaN(Number(process.argv[i]))) throw new Error('Provided values were not numbers!')
+    }
+    dailyExerciseHours = auxDailyExerciseHours
+    if(isNaN(Number(process.argv[2]))) throw new Error('Provided values were not numbers!')
+    target = Number(process.argv[2])
+  } else {
+    throw new Error('Not enough arguments');
+  }
+  console.log(calculateExercises(dailyExerciseHours, target))
+} catch (e) {
+  console.error(e.message)
+}
+
