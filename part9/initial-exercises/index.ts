@@ -1,42 +1,42 @@
-import express from 'express'
-import { calculateBmi } from './bmiCalculator'
+import express from 'express';
+import { calculateBmi } from './bmiCalculator';
 
-const app = express()
+const app = express();
 
 app.get('/ping', (_req, res) => {
-  res.send('pong')
-})
+  res.send('pong');
+});
 
-const PORT = 3003
+const PORT = 3003;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+  console.log(`Server running on port ${PORT}`);
+});
 
 app.get('/hello', (_req,res) => {
-  res.send('Hello Full Stack!')
-})
+  res.send('Hello Full Stack!');
+});
 
 app.get('/bmi', (req,res) => {
   try {
-    const weight = Number(req.query.weight) | 0
-    const height = Number(req.query.height) | 0
+    const weight = Number(req.query.weight) | 0;
+    const height = Number(req.query.height) | 0;
     if(weight && height){
       const response = {
         weight,
         height,
         bmi: calculateBmi(height,weight)
-      }
-      res.send(response)
+      };
+      res.send(response);
     } else {
-      res.send({error: "malformatted parameters"})
+      res.send({error: "malformatted parameters"});
     }
   } catch (e) {
-    console.error(e.message)
-    res.send({error: e.message})
+    console.error(e);
+    res.send({error: "Error"});
   }
   
-})
+});
 /*
 const calculateBmi = (height:number, weight:number):string => {
   const bmi = weight/ ((height/100)^2)
