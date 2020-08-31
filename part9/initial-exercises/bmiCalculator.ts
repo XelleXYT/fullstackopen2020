@@ -1,4 +1,4 @@
-const calculateBmi = (height:number, weight:number):string => {
+export const calculateBmi = (height:number, weight:number):string => {
   const bmi = weight/ ((height/100)^2)
 
   switch(true){
@@ -23,6 +23,7 @@ const calculateBmi = (height:number, weight:number):string => {
   }
 }
 
+/*
 if(process.argv.length < 4) throw new Error('Not enought arguments')
 if(process.argv.length > 4) throw new Error('Too many arguments')
 
@@ -35,5 +36,5 @@ try {
 } catch (e) {
   console.error(e.message)
 }
-
+*/
 
