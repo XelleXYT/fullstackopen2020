@@ -8,7 +8,7 @@ interface ExerciseStats {
   ratingDescription: string
 }
 
-const calculateExercises = (dailyExerciseHours:Array<number>, target:number):ExerciseStats => {
+export const calculateExercises = (dailyExerciseHours:Array<number>, target:number):ExerciseStats => {
   const averageTime = dailyExerciseHours.reduce((a,b) => a+b)/dailyExerciseHours.length;
 
   let rating = 1;
@@ -43,7 +43,7 @@ const calculateExercises = (dailyExerciseHours:Array<number>, target:number):Exe
   };
   return stats;
 };
-
+/*
 try {
   let dailyExerciseHours = [0];
   let target = 0;
@@ -64,3 +64,4 @@ try {
   console.error(e);
 }
 
+*/
