@@ -13,4 +13,16 @@ router.post('/', (req, res) => {
   res.status(201).json(newPatientEntry);
 });
 
+router.get('/:id', (req, res) => {
+  const id = req.params.id;
+  const patient = patientService.getEntry(id);
+
+  if(patient){
+    res.status(200).json(patient);
+  } else {
+    res.status(404);
+  }
+
+})
+
 export default router;
