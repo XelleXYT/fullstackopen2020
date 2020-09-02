@@ -1,10 +1,10 @@
 import React from  'react'
-import { Part } from '../types/Part';
+import { CoursePart } from '../types/CoursePart';
 
-const Total: React.FC<{ courseParts: Part[]}> = ({ courseParts }) => (
+const Total: React.FC<{ courseParts: CoursePart[]}> = ({ courseParts }) => (
   <p>
     Number of exercises{" "}
-    {courseParts.reduce((carry: any, part: any) => carry + part.exerciseCount, 0)}
+    {courseParts.reduce((carry, part) => carry + part.exerciseCount, 0)}
   </p>
 );
 
