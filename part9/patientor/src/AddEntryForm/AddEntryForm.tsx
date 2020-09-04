@@ -42,7 +42,7 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit }) => {
           errors.date = requiredError;
         }
         if(!Date.parse(values.date)) {
-            errors.date = "Invalid date format";
+            errors.date = "Invalid date format"; 
         } 
         if (!values.healthCheckRating && values.healthCheckRating !== 0) {
           errors.healthCheckRating = requiredError;
