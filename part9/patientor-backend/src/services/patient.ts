@@ -10,7 +10,7 @@ const getEntries = (): Array<Patient> => {
 };
 
 const getEntry = (id: string): Patient | undefined => {
-  return patients.find((p) => p.id = id)
+  return patients.find((p) => p.id = id);
 };
 
 const addEntry = (entry: NewPatient): Patient => {

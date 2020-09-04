@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import { useStateValue, getPatient } from '../state';
 import { Patient } from '../types';
 import axios from 'axios';
@@ -6,7 +6,7 @@ import { apiBaseUrl } from '../constants';
 import { Container, Header, Icon } from 'semantic-ui-react';
 
 const PatientPage: React.FC<{patientId: string}> = ({patientId}) => {
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients, diagnosis }, dispatch] = useStateValue();
   const [patient, setPatient] = React.useState<Patient | undefined>();
 
   useEffect(()=> {
@@ -24,12 +24,12 @@ const PatientPage: React.FC<{patientId: string}> = ({patientId}) => {
           console.error(e.message);
         }
       }
-    }
+    };
     fetchPatient();
     // eslint-disable-next-line
   }, [patientId])
 
-  if(!patient) return null;
+  if(!patient || !diagnosis) return null;
 
   const getGender = (gender: string) => {
     switch(gender){
@@ -42,7 +42,7 @@ const PatientPage: React.FC<{patientId: string}> = ({patientId}) => {
       default:
         return <Icon name="genderless"/>;
     }
-  }
+  };
 
   return (
     <div className="App">
@@ -56,14 +56,14 @@ const PatientPage: React.FC<{patientId: string}> = ({patientId}) => {
             <div key={e.id}>
               <div>{e.date} {e.description}</div>
               <ul>
-                {e.diagnosisCodes?.map(dc => <li key={dc}>{dc}</li>)}
+                {e.diagnosisCodes?.map(dc => <li key={dc}>{dc} {diagnosis[dc]?.name}</li>)}
               </ul>
             </div>
           )}
         </div>
       </Container>
     </div>
-  )
+  );
 };
 
 export default PatientPage;
