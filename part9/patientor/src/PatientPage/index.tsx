@@ -3,11 +3,12 @@ import { useStateValue, getPatient } from '../state';
 import { Patient } from '../types';
 import axios from 'axios';
 import { apiBaseUrl } from '../constants';
-import { Container, Header, Icon } from 'semantic-ui-react';
+import { Container, Header, Icon, Segment } from 'semantic-ui-react';
 import EntryDetails from '../components/EntryDetails';
+import { EntryFormValues, AddEntryForm } from "../AddEntryForm/AddEntryForm";
 
 const PatientPage: React.FC<{patientId: string}> = ({patientId}) => {
-  const [{ patients, diagnosis }, dispatch] = useStateValue();
+  const [{ patients }, dispatch] = useStateValue();
   const [patient, setPatient] = React.useState<Patient | undefined>();
 
   useEffect(()=> {
@@ -30,7 +31,20 @@ const PatientPage: React.FC<{patientId: string}> = ({patientId}) => {
     // eslint-disable-next-line
   }, [patientId])
 
-  if(!patient || !diagnosis) return null;
+  const addNewEntry = async (values: EntryFormValues) => {
+    try {
+      const { data: updatedPatient } = await axios.post<Patient>(
+        `${apiBaseUrl}/patients/${patientId}/entries`,
+        values
+      );
+      dispatch(getPatient(updatedPatient));
+      setPatient(updatedPatient);
+    } catch (e) {
+      console.error(e.message);
+    }
+  };
+
+  if(!patient) return null;
 
   const getGender = (gender: string) => {
     switch(gender){
@@ -53,10 +67,14 @@ const PatientPage: React.FC<{patientId: string}> = ({patientId}) => {
           <div>ssn: {patient.ssn}</div>
           <div>occupation: {patient.occupation}</div>
           <Header as="h3">entries</Header>
-          {patient.entries.map(e =>
+          {patient?.entries?.map(e =>
             <EntryDetails key={e.id} entry={e} />
           )}
         </div>
+        <Segment>
+          <Header as ="h3">add entry</Header>
+          <AddEntryForm onSubmit={(data)=> addNewEntry(data) } />
+        </Segment>
       </Container>
     </div>
   );

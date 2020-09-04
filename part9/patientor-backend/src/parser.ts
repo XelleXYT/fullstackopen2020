@@ -86,6 +86,7 @@ export const toNewEntry = (object:any): NewEntry => {
       } 
       return {
         ...baseEntry,
+        type: object.type,
         healthCheckRating: parseHealthCheckRating(object.healthCheckRating)
       };
     case 'OccupationalHealthCare':
@@ -97,6 +98,7 @@ export const toNewEntry = (object:any): NewEntry => {
       }
       return {
         ...baseEntry,
+        type: object.type,
         employerName: parseString(object.employerName),
         sickLeave: {
           startDate: parseDate(object.sickLeave.startDate),
@@ -109,6 +111,7 @@ export const toNewEntry = (object:any): NewEntry => {
       }
       return {
         ...baseEntry,
+        type: object.type,
         discharge: {
           date: parseDate(object.discharge.date),
           criteria: parseString(object.discharge.criteria)

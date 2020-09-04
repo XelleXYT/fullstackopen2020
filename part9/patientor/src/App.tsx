@@ -42,7 +42,9 @@ const App: React.FC = () => {
     fetchDiagnosisList();
   }, [dispatch]);
 
-  const patientId = useRouteMatch<{id: string}>('/patients/:id')?.params?.id;
+  const patientMatch = useRouteMatch<{id: string}>('/patients/:id');
+  const patientId = patientMatch?.params?.id;
+
 
   return (
     <div className="App">
