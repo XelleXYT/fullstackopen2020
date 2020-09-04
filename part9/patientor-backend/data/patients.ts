@@ -22,6 +22,19 @@ const patients: Patient[] = [
           date: '2015-01-16',
           criteria: 'Thumb has healed.',
         }
+      },
+      {
+        id: uuid.v4(),
+        date: '2020-01-01',
+        type: 'Hospital',
+        specialist: 'MD House',
+        diagnosisCodes: ['S62.5'],
+        description:
+          "Prueba",
+        discharge: {
+          date: '2020-01-02',
+          criteria: 'Probado.',
+        }
       }
     ]
   },

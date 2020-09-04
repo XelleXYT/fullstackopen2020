@@ -1,19 +1,20 @@
 import patientData from '../../data/patients';
 import { Patient, NewPatient } from '../types/Patient';
 import * as uuid from 'uuid';
+import { NewEntry, Entry } from '../types/Entry';
 
 
 const patients: Array<Patient> = patientData;
 
-const getEntries = (): Array<Patient> => {
+const getPatients = (): Array<Patient> => {
   return patients;
 };
 
-const getEntry = (id: string): Patient | undefined => {
+const getPatient = (id: string): Patient | undefined => {
   return patients.find((p) => p.id = id);
 };
 
-const addEntry = (entry: NewPatient): Patient => {
+const addPatient = (entry: NewPatient): Patient => {
   const newPatient: Patient = {
       id: uuid.v4(),
       ...entry
@@ -23,8 +24,20 @@ const addEntry = (entry: NewPatient): Patient => {
     return newPatient;
 };
 
+const addEntry = (patientId: string, entry: NewEntry):Patient => {
+  const patient = patients.find(p => p.id = patientId);
+  if(!patient) throw new Error('Missing patient');
+  const newEntry: Entry = {
+    id: uuid.v4(),
+    ...entry
+  };
+  patient.entries.push(newEntry);
+  return patient;
+};
+
 export default {
-  getEntries,
-  getEntry,
+  getPatients,
+  getPatient,
+  addPatient,
   addEntry
 };
